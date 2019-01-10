@@ -2,11 +2,13 @@ package demo.kataapi.demo.service.dto;
 
 import demo.kataapi.demo.service.DateUtil;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class BookingRequestDto {
 
-    @Pattern(regexp = "")
     @NotBlank
     private String date;
 

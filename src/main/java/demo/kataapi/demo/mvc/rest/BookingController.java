@@ -3,6 +3,7 @@ package demo.kataapi.demo.mvc.rest;
 import demo.kataapi.demo.service.IBookingService;
 import demo.kataapi.demo.service.dto.BookingDto;
 import demo.kataapi.demo.service.dto.BookingRequestDto;
+import demo.kataapi.demo.service.exception.BookingConflitException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -32,8 +33,14 @@ public class BookingController {
     }
 
     @PostMapping
-    public ResponseEntity<BookingDto> createBooking(@Valid @RequestBody BookingRequestDto bookingRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(bookingService.createBooking(bookingRequest));
+    public ResponseEntity<Object> createBooking(@Valid @RequestBody BookingRequestDto bookingRequest) {
+        BookingDto booking = null;
+        try {
+            booking = bookingService.createBooking(bookingRequest);
+            return ResponseEntity.status(HttpStatus.CREATED).body(booking);
+        } catch (BookingConflitException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getBookingAvailabelDto());
+        }
     }
 
     @DeleteMapping("/{idBooking}")

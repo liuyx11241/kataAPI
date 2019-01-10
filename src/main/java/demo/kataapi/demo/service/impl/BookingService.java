@@ -5,8 +5,10 @@ import demo.kataapi.demo.domain.Room;
 import demo.kataapi.demo.repo.BookingRepo;
 import demo.kataapi.demo.repo.RoomRepo;
 import demo.kataapi.demo.service.IBookingService;
+import demo.kataapi.demo.service.dto.BookingAvailabelDto;
 import demo.kataapi.demo.service.dto.BookingDto;
 import demo.kataapi.demo.service.dto.BookingRequestDto;
+import demo.kataapi.demo.service.exception.BookingConflitException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -57,39 +59,33 @@ public class BookingService implements IBookingService {
     }
 
     @Override
-    public BookingDto createBooking(BookingRequestDto bookingRequestDto) {
+    public BookingDto createBooking(BookingRequestDto bookingRequestDto) throws BookingConflitException {
         if (Objects.isNull(bookingRequestDto) || Objects.isNull(bookingRequestDto.getIdRoom())) {
             throw new IllegalArgumentException("Room id cannot be null");
         }
         Room bookingRoom = roomRepo.findById(bookingRequestDto.getIdRoom())
             .orElseThrow(() -> new IllegalArgumentException(
                 String.format("Room %s doesn't exist", bookingRequestDto.getIdRoom())));
-        // todo check available
+        SortedSet<Integer> availableBookings = new TreeSet<>(availableTime);
+        List<Booking> listBookings = bookingRepo.findAllByRoom_IdTechAndDate(
+            bookingRequestDto.getIdRoom(), bookingRequestDto.getDate());
+        for (Booking booking : listBookings) {
+            for (int time = booking.getStartTime(); time < booking.getEndTime(); time++) {
+                availableBookings.remove(time);
+            }
+        }
 
+        for (int time = bookingRequestDto.getStartTime(); time < bookingRequestDto.getEndTime(); time++) {
+            if (!availableBookings.contains(time)) {
+                throw new BookingConflitException(
+                    new BookingAvailabelDto(bookingRequestDto.getIdRoom(), bookingRequestDto.getDate(), availableBookings));
+            }
+        }
 
         Booking booking = modelMapper.map(bookingRequestDto, Booking.class);
         booking.setRoom(bookingRoom);
         bookingRepo.save(booking);
         return modelMapper.map(booking, BookingDto.class);
-    }
-
-    @Override
-    public SortedSet<Integer> listAvailableBookings(String idRoom, String date) {
-        if (Objects.isNull(idRoom)) {
-            throw new IllegalArgumentException("Room id cannot be null");
-        }
-        roomRepo.findById(idRoom)
-            .orElseThrow(() -> new IllegalArgumentException(
-                String.format("Room %s doesn't exist", idRoom)));
-        SortedSet<Integer> timeSet = new TreeSet<>(availableTime);
-        List<Booking> listBookings = bookingRepo.findAllByRoom_IdTechAndDate(idRoom, date);
-        for (Booking booking : listBookings) {
-            for (int time = booking.getStartTime(); time < booking.getEndTime(); time++) {
-                timeSet.remove(time);
-            }
-        }
-
-        return timeSet;
     }
 
     private Booking findBookingOrThrow(String idBooking) {

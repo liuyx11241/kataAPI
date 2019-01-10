@@ -2,6 +2,7 @@ package demo.kataapi.demo.service;
 
 import demo.kataapi.demo.service.dto.BookingDto;
 import demo.kataapi.demo.service.dto.BookingRequestDto;
+import demo.kataapi.demo.service.exception.BookingConflitException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.format.DateTimeParseException;
-import java.util.SortedSet;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -33,14 +33,14 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void findBooking() {
+    public void findBooking() throws BookingConflitException {
         BookingDto bookingExpected = bookingService.createBooking(bookingRequestDto);
         BookingDto booking = bookingService.findBooking(bookingExpected.getIdTech());
         Assert.assertEquals(bookingExpected.getIdTech(), booking.getIdTech());
     }
 
     @Test
-    public void deleteBooking() {
+    public void deleteBooking() throws BookingConflitException {
         BookingDto bookingExpected = bookingService.createBooking(bookingRequestDto);
         BookingDto booking = bookingService.deleteBooking(bookingExpected.getIdTech());
         Assert.assertEquals(bookingExpected.getIdTech(), booking.getIdTech());
@@ -55,27 +55,19 @@ public class BookingServiceTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void createBooking_idRoomNull() {
+    public void createBooking_idRoomNull() throws BookingConflitException {
         bookingService.createBooking(new BookingRequestDto());
     }
 
     @Test(expected = DateTimeParseException.class)
-    public void createBooking_dateInvalid() {
+    public void createBooking_dateInvalid() throws BookingConflitException {
         BookingRequestDto bookingRequestDto = new BookingRequestDto();
         bookingRequestDto.setDate("20191332");
         bookingService.createBooking(bookingRequestDto);
     }
 
     @Test
-    public void createBooking() {
+    public void createBooking() throws BookingConflitException {
         bookingService.createBooking(bookingRequestDto);
-    }
-
-    @Test
-    public void listAvailableBookings() {
-        bookingService.createBooking(bookingRequestDto);
-
-        SortedSet<Integer> listAvailableBookings = bookingService.listAvailableBookings("0", "20190101");
-        Assert.assertEquals(23, listAvailableBookings.size());
     }
 }

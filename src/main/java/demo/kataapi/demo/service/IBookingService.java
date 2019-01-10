@@ -2,9 +2,9 @@ package demo.kataapi.demo.service;
 
 import demo.kataapi.demo.service.dto.BookingDto;
 import demo.kataapi.demo.service.dto.BookingRequestDto;
+import demo.kataapi.demo.service.exception.BookingConflitException;
 
 import java.util.List;
-import java.util.SortedSet;
 
 public interface IBookingService {
 
@@ -14,7 +14,5 @@ public interface IBookingService {
 
     BookingDto deleteBooking(String idBooking);
 
-    BookingDto createBooking(BookingRequestDto bookingRequestDto);
-
-    SortedSet<Integer> listAvailableBookings(String idRoom, String date);
+    BookingDto createBooking(BookingRequestDto bookingRequestDto) throws BookingConflitException;
 }
