@@ -63,6 +63,9 @@ public class BookingService implements IBookingService {
         if (Objects.isNull(bookingRequestDto) || Objects.isNull(bookingRequestDto.getIdRoom())) {
             throw new IllegalArgumentException("Room id cannot be null");
         }
+        if (Objects.compare(bookingRequestDto.getStartTime(), bookingRequestDto.getEndTime(), Integer::compareTo) >= 0) {
+            throw new IllegalArgumentException("Start Time cannot after End Time");
+        }
         Room bookingRoom = roomRepo.findById(bookingRequestDto.getIdRoom())
             .orElseThrow(() -> new IllegalArgumentException(
                 String.format("Room %s doesn't exist", bookingRequestDto.getIdRoom())));

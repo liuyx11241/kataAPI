@@ -34,6 +34,7 @@ public class BookingServiceTest {
 
     @Test
     public void findBooking() throws BookingConflitException {
+        bookingRequestDto.setDate("20190103");
         BookingDto bookingExpected = bookingService.createBooking(bookingRequestDto);
         BookingDto booking = bookingService.findBooking(bookingExpected.getIdTech());
         Assert.assertEquals(bookingExpected.getIdTech(), booking.getIdTech());
@@ -41,6 +42,7 @@ public class BookingServiceTest {
 
     @Test
     public void deleteBooking() throws BookingConflitException {
+        bookingRequestDto.setDate("20190102");
         BookingDto bookingExpected = bookingService.createBooking(bookingRequestDto);
         BookingDto booking = bookingService.deleteBooking(bookingExpected.getIdTech());
         Assert.assertEquals(bookingExpected.getIdTech(), booking.getIdTech());
@@ -59,6 +61,14 @@ public class BookingServiceTest {
         bookingService.createBooking(new BookingRequestDto());
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void createBooking_timeInvalid() throws BookingConflitException {
+        bookingRequestDto.setDate("20190105");
+        bookingRequestDto.setStartTime(10);
+        bookingRequestDto.setEndTime(9);
+        bookingService.createBooking(bookingRequestDto);
+    }
+
     @Test(expected = DateTimeParseException.class)
     public void createBooking_dateInvalid() throws BookingConflitException {
         BookingRequestDto bookingRequestDto = new BookingRequestDto();
@@ -68,6 +78,16 @@ public class BookingServiceTest {
 
     @Test
     public void createBooking() throws BookingConflitException {
+        bookingService.createBooking(bookingRequestDto);
+    }
+
+    @Test(expected = BookingConflitException.class)
+    public void createBooking_conflit() throws BookingConflitException {
+        bookingRequestDto.setDate("20190104");
+        bookingRequestDto.setStartTime(8);
+        bookingRequestDto.setEndTime(10);
+        bookingService.createBooking(bookingRequestDto);
+        bookingRequestDto.setStartTime(9);
         bookingService.createBooking(bookingRequestDto);
     }
 }

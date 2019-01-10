@@ -1,12 +1,16 @@
 package demo.kataapi.demo.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import demo.kataapi.demo.service.DateUtil;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+@ApiModel
 public class BookingRequestDto {
 
     @NotBlank
@@ -28,6 +32,8 @@ public class BookingRequestDto {
     @NotBlank
     private String idRoom;
 
+    @JsonProperty(required = true)
+    @ApiModelProperty(notes = "The date in format yyyyMMdd", required = true)
     public String getDate() {
         return date;
     }
@@ -36,6 +42,8 @@ public class BookingRequestDto {
         this.date = DateUtil.reformDate(date);
     }
 
+    @JsonProperty(required = true)
+    @ApiModelProperty(notes = "The begin time in hour", required = true)
     public Integer getStartTime() {
         return startTime;
     }
@@ -44,6 +52,7 @@ public class BookingRequestDto {
         this.startTime = startTime;
     }
 
+    @ApiModelProperty(notes = "The end time in hour", required = true)
     public Integer getEndTime() {
         return endTime;
     }
@@ -52,6 +61,7 @@ public class BookingRequestDto {
         this.endTime = endTime;
     }
 
+    @ApiModelProperty(notes = "The person's name who will book", required = true)
     public String getPersonName() {
         return personName;
     }
@@ -60,6 +70,7 @@ public class BookingRequestDto {
         this.personName = personName;
     }
 
+    @ApiModelProperty(notes = "The id of room to book", required = true)
     public String getIdRoom() {
         return idRoom;
     }
