@@ -5,8 +5,6 @@ public class RoomDto {
 
     private String name;
 
-    private String location;
-
     private Integer capacity;
 
     public String getIdTech() {
@@ -23,14 +21,6 @@ public class RoomDto {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     public Integer getCapacity() {

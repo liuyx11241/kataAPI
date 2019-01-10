@@ -7,18 +7,19 @@ import javax.persistence.*;
 public class Booking {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String idTech;
 
-    @Column(length = 8)
+    @Column(length = 8, nullable = false)
     private String date;
 
-    @Column(length = 2)
+    @Column(length = 2, nullable = false)
     private Integer startTime;
 
-    @Column(length = 2)
+    @Column(length = 2, nullable = false)
     private Integer endTime;
 
-    @Column
+    @Column(nullable = false)
     private String personName;
 
     @ManyToOne(optional = false)

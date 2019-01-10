@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,11 +30,14 @@ public class RoomService implements IRoomService {
 
     @Override
     public RoomDto getRoom(String idRoom) {
+        return modelMapper.map(findOrThrow(idRoom), RoomDto.class);
+    }
+
+    Room findOrThrow(String idRoom) {
         if (Objects.isNull(idRoom)) {
             throw new IllegalArgumentException("Room id cannot be null");
         }
-        Optional<Room> roomOptional = roomRepo.findById(idRoom);
-        return roomOptional.map(room -> modelMapper.map(room, RoomDto.class))
-            .orElseThrow(() -> new IllegalArgumentException(String.format("Room %s doesn't exist", idRoom)));
+        return roomRepo.findById(idRoom)
+            .orElseThrow(() -> new IllegalArgumentException(String.format("Room %s does not exist", idRoom)));
     }
 }
