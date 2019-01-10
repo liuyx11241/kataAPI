@@ -1,26 +1,26 @@
 package demo.kataapi.demo.service.exception;
 
-import demo.kataapi.demo.service.dto.BookingAvailabelDto;
+import demo.kataapi.demo.service.dto.BookingAvailableDto;
 
 public class BookingConflitException extends Exception {
 
-    private BookingAvailabelDto bookingAvailabelDto;
+    private BookingAvailableDto bookingAvailableDto;
 
-    public BookingConflitException(BookingAvailabelDto bookingAvailabelDto) {
-        this.bookingAvailabelDto = bookingAvailabelDto;
+    public BookingConflitException(BookingAvailableDto bookingAvailableDto) {
+        this.bookingAvailableDto = bookingAvailableDto;
     }
 
-    public BookingConflitException(String message, BookingAvailabelDto bookingAvailabelDto) {
+    public BookingConflitException(String message, BookingAvailableDto bookingAvailableDto) {
         super(message);
-        this.bookingAvailabelDto = bookingAvailabelDto;
+        this.bookingAvailableDto = bookingAvailableDto;
     }
 
-    public BookingConflitException(String message, Throwable cause, BookingAvailabelDto bookingAvailabelDto) {
+    public BookingConflitException(String message, Throwable cause, BookingAvailableDto bookingAvailableDto) {
         super(message, cause);
-        this.bookingAvailabelDto = bookingAvailabelDto;
+        this.bookingAvailableDto = bookingAvailableDto;
     }
 
-    public BookingAvailabelDto getBookingAvailabelDto() {
-        return bookingAvailabelDto;
+    public BookingAvailableDto getBookingAvailableDto() {
+        return bookingAvailableDto;
     }
 }

@@ -1,14 +1,23 @@
 package demo.kataapi.demo.service.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(description = "response of booking")
 public class BookingDto {
+    @ApiModelProperty("id booking")
     private String idTech;
 
+    @ApiModelProperty
     private String date;
 
+    @ApiModelProperty
     private Integer startTime;
 
+    @ApiModelProperty
     private Integer endTime;
 
+    @ApiModelProperty("person who booked this room")
     private String personName;
 
     private RoomDto room;

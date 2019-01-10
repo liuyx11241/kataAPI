@@ -5,7 +5,7 @@ import demo.kataapi.demo.domain.Room;
 import demo.kataapi.demo.repo.BookingRepo;
 import demo.kataapi.demo.repo.RoomRepo;
 import demo.kataapi.demo.service.IBookingService;
-import demo.kataapi.demo.service.dto.BookingAvailabelDto;
+import demo.kataapi.demo.service.dto.BookingAvailableDto;
 import demo.kataapi.demo.service.dto.BookingDto;
 import demo.kataapi.demo.service.dto.BookingRequestDto;
 import demo.kataapi.demo.service.exception.BookingConflitException;
@@ -81,7 +81,7 @@ public class BookingService implements IBookingService {
         for (int time = bookingRequestDto.getStartTime(); time < bookingRequestDto.getEndTime(); time++) {
             if (!availableBookings.contains(time)) {
                 throw new BookingConflitException(
-                    new BookingAvailabelDto(bookingRequestDto.getIdRoom(), bookingRequestDto.getDate(), availableBookings));
+                    new BookingAvailableDto(bookingRequestDto.getIdRoom(), bookingRequestDto.getDate(), availableBookings));
             }
         }
 

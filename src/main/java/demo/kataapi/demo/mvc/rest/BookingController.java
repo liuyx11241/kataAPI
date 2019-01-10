@@ -1,7 +1,7 @@
 package demo.kataapi.demo.mvc.rest;
 
 import demo.kataapi.demo.service.IBookingService;
-import demo.kataapi.demo.service.dto.BookingAvailabelDto;
+import demo.kataapi.demo.service.dto.BookingAvailableDto;
 import demo.kataapi.demo.service.dto.BookingDto;
 import demo.kataapi.demo.service.dto.BookingRequestDto;
 import demo.kataapi.demo.service.dto.RoomDto;
@@ -59,7 +59,7 @@ public class BookingController {
         @ApiResponse(code = 401, message = "Unauthorized"),
         @ApiResponse(code = 403, message = "Forbidden"),
         @ApiResponse(code = 404, message = "Not Found"),
-        @ApiResponse(code = 409, message = "Conflit", response = BookingAvailabelDto.class),
+        @ApiResponse(code = 409, message = "Conflit", response = BookingAvailableDto.class),
         @ApiResponse(code = 500, message = "Failure")})
     @PostMapping
     public ResponseEntity<Object> createBooking(@Valid @RequestBody BookingRequestDto bookingRequest) {
@@ -68,7 +68,7 @@ public class BookingController {
             booking = bookingService.createBooking(bookingRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(booking);
         } catch (BookingConflitException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getBookingAvailabelDto());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getBookingAvailableDto());
         }
     }
 

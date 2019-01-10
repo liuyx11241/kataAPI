@@ -10,7 +10,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@ApiModel
+@ApiModel(description = "Request Body for creating")
 public class BookingRequestDto {
 
     @NotBlank
